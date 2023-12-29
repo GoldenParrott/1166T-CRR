@@ -1,3 +1,5 @@
+// hello!
+
 #include "main.h"
 #include "init.h"
 /**
