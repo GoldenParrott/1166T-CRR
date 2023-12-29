@@ -1,5 +1,3 @@
-// hello!
-
 #include "main.h"
 #include "init.h"
 /**
@@ -100,7 +98,8 @@ void opcontrol() {
     	} else {
       		RightWheels.brake();
       		LeftWheels.brake();
-    	}     
+    	}  
+
 	//Indexer
 	  //Single-Shot
 		if(Master.get_digital(DIGITAL_X)==true){
@@ -112,6 +111,7 @@ void opcontrol() {
 	  	if(Master.get_digital(DIGITAL_Y)==true){
 			
 		}
+		
 	//Arm
 		if(Master.get_digital(DIGITAL_DOWN)==true){
 			Arm.move(128);
