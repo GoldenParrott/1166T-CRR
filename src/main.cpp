@@ -104,14 +104,22 @@ void opcontrol() {
 	  //Single-Shot
 		if(Master.get_digital(DIGITAL_X)==true){
 			Indexer.move_relative(540,100);
-			waitUntil((Indexer.is_stopped())==1);
 		}
 
 	  //Rapid-Fire
 	  	if(Master.get_digital(DIGITAL_Y)==true){
-			
+			Indexer.move(128);
+			waitUntil(Master.get_digital(DIGITAL_Y)==false);
+			Indexer.brake();
 		}
-		
+
+	  //Rewind
+		if(Master.get_digital(DIGITAL_A)==true){
+			Indexer.move(-128);
+			waitUntil(Master.get_digital(DIGITAL_A)==false);
+			Indexer.brake();
+		}
+
 	//Arm
 		if(Master.get_digital(DIGITAL_DOWN)==true){
 			Arm.move(128);
@@ -144,15 +152,15 @@ void opcontrol() {
 		}
 
 	  //Right plow
-		if((Master.get_digital(DIGITAL_R2)==true)&&(pl==false)){
+		if((Master.get_digital(DIGITAL_R2)==true)&&(pr==false)){
 			PlowRight.set_value(true);
 			waitUntil(Master.get_digital(DIGITAL_R2)==false);
 			pr = true;
 		}
-		if((Master.get_digital(DIGITAL_R2)==true)&&(pl==true)){
+		if((Master.get_digital(DIGITAL_R2)==true)&&(pr==true)){
 			PlowRight.set_value(false);
 			waitUntil(Master.get_digital(DIGITAL_R2)==false);
-			pl = false;
+			pr = false;
 		}
 
 	//Shield
@@ -179,6 +187,8 @@ void opcontrol() {
 			thr = false;
 		}
 		
+	//
+	
 	pros::delay(50);
 	}
 }

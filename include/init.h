@@ -1,13 +1,15 @@
 #include "api.h"
 
+
+//Motors
 pros::Controller Master(pros::E_CONTROLLER_MASTER);
 pros::Controller Partner(pros::E_CONTROLLER_PARTNER);
 
-pros::Motor ArmLeft(2,1);
+pros::Motor ArmLeft(4,1);
 pros::Motor ArmRight(3,0);
 pros::Motor_Group Arm({ArmLeft, ArmRight});
 
-pros::Motor Indexer(999);
+pros::Motor Indexer(5);
 
 pros::Motor Intake(20);
 
@@ -21,13 +23,15 @@ pros::Motor_Group RightWheels({FrontRight, BackRight});
 
 pros::Motor_Group AllWheels({FrontRight, BackRight, FrontLeft, BackLeft});
 
+
+//Pnuematics
 pros::ADIDigitalOut PlowLeft(1);
 pros::ADIDigitalOut PlowRight(8);
 
-pros::ADIDigitalOut ShieldLeft(2);
-pros::ADIDigitalOut ShieldRight(3);
+pros::ADIDigitalOut ShieldLeft(4);
+pros::ADIDigitalOut ShieldRight(6);
 
-pros::ADIDigitalOut Tether(4);
+pros::ADIDigitalOut Tether(7);
 
 
 
