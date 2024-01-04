@@ -37,11 +37,11 @@ pros::ADIDigitalOut Tether(7);
 
 
 //Sensors
-pros::ADIDigitalOut Alpha(12);
-pros::ADIDigitalOut Beta(6);
-pros::ADIDigitalOut Gamma(13);
-pros::ADIDigitalOut Delta(14);
-pros::ADIDigitalOut Epsilon(999);
+pros::Distance Alpha(12);
+pros::Distance Beta(6);
+pros::Distance Gamma(13);
+pros::Distance Delta(14);
+pros::Distance Epsilon(16);
 
 pros::Imu Inertial(18);
 

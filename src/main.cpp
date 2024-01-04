@@ -107,10 +107,11 @@ void autonomous() {
 		
 		Arm.move(128);
 		LeftWheels.move(-128);
-		waitUntil((Inertial.get_heading() > 340)&&(Inertial.get_heading() < 350));
+		waitUntil((Inertial.get_heading() > 350)&&(Inertial.get_heading() < 360));
 		AllWheels.brake();
 		waitUntil(ArmLeft.get_position()>(12*360));
 		Arm.brake();
+		Master.print(0, 0, "Arm Position: %d", ArmLeft.get_position());
 		Indexer.move(128);
 		waitUntil(Indexer.get_position()>(132*360));
 		Indexer.brake();
@@ -149,13 +150,28 @@ void opcontrol() {
     	}  
 
 	//Indexer
+		int cancelShot;
+		if (Epsilon.get() <= 120) {
+			cancelShot = false;
+		} else {
+			cancelShot = true;
+		}
+
 	  //Single-Shot
 		if(Master.get_digital(DIGITAL_X)==true){
-			Indexer.move_relative(540,100);
+			Indexer.move_relative(360,100);
 		}
 
 	  //Rapid-Fire
 	  	if(Master.get_digital(DIGITAL_Y)==true){
+			Indexer.move(128);
+			waitUntil(Master.get_digital(DIGITAL_Y)==false);
+			Indexer.brake();
+		}
+
+	
+	  //Rapid-Fire With Check
+	  	if(Master.get_digital(DIGITAL_B)==true){
 			Indexer.move(128);
 			waitUntil(Master.get_digital(DIGITAL_Y)==false);
 			Indexer.brake();
