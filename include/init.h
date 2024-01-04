@@ -1,10 +1,12 @@
 #include "api.h"
 
 
-//Motors
+//Controllers
 pros::Controller Master(pros::E_CONTROLLER_MASTER);
 pros::Controller Partner(pros::E_CONTROLLER_PARTNER);
 
+
+//Motors
 pros::Motor ArmLeft(4,1);
 pros::Motor ArmRight(3,0);
 pros::Motor_Group Arm({ArmLeft, ArmRight});
@@ -34,7 +36,17 @@ pros::ADIDigitalOut ShieldRight(6);
 pros::ADIDigitalOut Tether(7);
 
 
+//Sensors
+pros::ADIDigitalOut Alpha(12);
+pros::ADIDigitalOut Beta(6);
+pros::ADIDigitalOut Gamma(13);
+pros::ADIDigitalOut Delta(14);
+pros::ADIDigitalOut Epsilon(999);
 
+pros::IMU Inertial();
+
+
+//Variables
 int drvtrDZ = 10;
 int drvtrFB;
 int drvtrLR;
