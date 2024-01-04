@@ -31,6 +31,7 @@ void initialize() {
 
 	Intake.move_velocity(100);
 	AllWheels.move_velocity(100);
+	Arm.move_velocity(100);
 	PlowLeft.set_value(false);
 	PlowRight.set_value(false);
 	ShieldLeft.set_value(false);
@@ -55,7 +56,25 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+
+	Inertial.reset();
+
+
+  //Selector for Multuple Autons
+	while(1){
+		if (Master.get_digital(DIGITAL_X)==true){
+			//Far Auton
+			auton = 1;
+		}else if(Master.get_digital(DIGITAL_B)==true){
+			//Near Auton
+			auton = 2;
+		}else if(Master.get_digital(DIGITAL_A)==true){
+			//Skills Auton
+			auton = 3;
+		}
+	}
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -68,7 +87,36 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	/*
+	ShieldLeft.set_value(true);
+	pros::delay(50);
+	ShieldLeft.set_value(false);
+	*/
+	//if(auton == 1){
+
+		//Far Auton
+
+	//}else if(auton == 2){
+
+		//Near Auton
+
+	//}else if(auton == 3){
+
+		//Skills Auton
+		
+		Arm.move(128);
+		LeftWheels.move(-128);
+		waitUntil((Inertial.get_heading() > 340)&&(Inertial.get_heading() < 350));
+		AllWheels.brake();
+		waitUntil(ArmLeft.get_position()>(12*360));
+		Arm.brake();
+		Indexer.move(128);
+		waitUntil(Indexer.get_position()>(132*360));
+		Indexer.brake();
+		
+	//}
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -122,9 +170,9 @@ void opcontrol() {
 
 	//Arm
 		if(Master.get_digital(DIGITAL_DOWN)==true){
-			Arm.move(128);
-		}else if(Master.get_digital(DIGITAL_UP)==true){
 			Arm.move(-128);
+		}else if(Master.get_digital(DIGITAL_UP)==true){
+			Arm.move(128);
 		} else {
 			Arm.brake();
 		}

@@ -7,8 +7,8 @@ pros::Controller Partner(pros::E_CONTROLLER_PARTNER);
 
 
 //Motors
-pros::Motor ArmLeft(4,1);
-pros::Motor ArmRight(3,0);
+pros::Motor ArmLeft(4,0);
+pros::Motor ArmRight(3,1);
 pros::Motor_Group Arm({ArmLeft, ArmRight});
 
 pros::Motor Indexer(5);
@@ -43,13 +43,14 @@ pros::ADIDigitalOut Gamma(13);
 pros::ADIDigitalOut Delta(14);
 pros::ADIDigitalOut Epsilon(999);
 
-pros::IMU Inertial();
+pros::Imu Inertial(18);
 
 
 //Variables
 int drvtrDZ = 10;
 int drvtrFB;
 int drvtrLR;
+int auton;
 bool pl = false;
 bool pr = false;
 bool shieldRaised = false;

@@ -311,7 +311,8 @@
     "upload_options": {
       "description": ":D",
       "slot": 1,
-      "icon": "X"
+      "icon": "X",
+      "after": "screen"
     }
   }
 }
