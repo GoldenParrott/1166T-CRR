@@ -1,20 +1,5 @@
 #include "main.h"
 #include "init.h"
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -24,10 +9,8 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
-	pros::lcd::register_btn1_cb(on_center_button);
-
+	
+	pros::lcd::set_text(0, "1166T - Technically Legal");
 
 	Intake.move_velocity(100);
 	AllWheels.move_velocity(100);
@@ -45,7 +28,12 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+	PlowLeft.set_value(false);
+	PlowRight.set_value(false);
+	ShieldLeft.set_value(false);
+	ShieldRight.set_value(false);
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -59,20 +47,34 @@ void disabled() {}
 void competition_initialize() {
 
 	Inertial.reset();
-
-
+	pros::lcd::set_text(0, "1166T - Technically Legal");
+	pros::lcd::set_text(1, "Current: None Selected");
+	pros::lcd::set_text(2, "Press the left button for near");
+	pros::lcd::set_text(3, "autonomous");
+	pros::lcd::set_text(4, "Press the middle button for far");
+	pros::lcd::set_text(5, "autonomous");
+	pros::lcd::set_text(6, "Press the right button for");
+	pros::lcd::set_text(7, "autonomous skills");
+	autonnumber = 3;
   //Selector for Multuple Autons
-	while(1){
-		if (Master.get_digital(DIGITAL_X)==true){
+	while(true){
+		if (pros::lcd::read_buttons() == 2){
 			//Far Auton
-			auton = 1;
-		}else if(Master.get_digital(DIGITAL_B)==true){
+			autonnumber = 1;
+			pros::lcd::set_text(1, "Current: Far Autonomous");
+			Inertial.reset();
+		}else if(pros::lcd::read_buttons() == 4){
 			//Near Auton
-			auton = 2;
-		}else if(Master.get_digital(DIGITAL_A)==true){
+			autonnumber = 2;
+			pros::lcd::set_text(1, "Current: Near Autonomous");
+			Inertial.reset();
+		}else if(pros::lcd::read_buttons() == 1){
 			//Skills Auton
-			auton = 3;
+			autonnumber = 3;
+			pros::lcd::set_text(1, "Current: Autonomous Skills");
+			Inertial.reset();
 		}
+		pros::delay(50);
 	}
 }
 
@@ -88,35 +90,75 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
+	AllWheels.set_brake_modes(MOTOR_BRAKE_HOLD);
 	/*
 	ShieldLeft.set_value(true);
 	pros::delay(50);
 	ShieldLeft.set_value(false);
 	*/
-	//if(auton == 1){
+	if(autonnumber == 1){
 
 		//Far Auton
 
-	//}else if(auton == 2){
+	}else if(autonnumber == 2){
 
 		//Near Auton
 
-	//}else if(auton == 3){
+	}else if(autonnumber == 3){
 
 		//Skills Auton
-		
+		AllWheels.set_brake_modes(MOTOR_BRAKE_COAST);
 		Arm.move(128);
 		LeftWheels.move(-128);
-		waitUntil((Inertial.get_heading() > 350)&&(Inertial.get_heading() < 360));
+		waitUntil((Inertial.get_heading() > 340)&&(Inertial.get_heading() < 350));
 		AllWheels.brake();
-		waitUntil(ArmLeft.get_position()>(12*360));
+	//Line up to shoot triballs
+		waitUntil(ArmLeft.get_position()>(13*360));
 		Arm.brake();
-		Master.print(0, 0, "Arm Position: %d", ArmLeft.get_position());
-		Indexer.move(128);
-		waitUntil(Indexer.get_position()>(132*360));
-		Indexer.brake();
+	//
+		//Indexer.move(128);
+		//waitUntil(Indexer.get_position()>(168*360));
+		//Indexer.brake();
+		Arm.move(-128);
+		waitUntil(ArmLeft.get_position()<(0.25*360));
+		Arm.brake();
+		LeftWheels.move(64);
+		waitUntil((Inertial.get_heading() > 25)&&(Inertial.get_heading() < 30));
+		RightWheels.move(64);
+		LeftWheels.brake();
+		waitUntil((Inertial.get_heading() > 0)&&(Inertial.get_heading() < 10));
+		AllWheels.brake();
+		pros::delay(100);
+		AllWheels.move(128);
+		AllWheels.set_brake_modes(MOTOR_BRAKE_HOLD);
+		waitUntil(Delta.get()<300);
+		waitUntil(Alpha.get()<1000);
+		AllWheels.move(64);
+		waitUntil(Alpha.get()<600);
+		AllWheels.brake();
+		PlowLeft.set_value(true);
+		RightWheels.move(64);
+		PlowLeft.set_value(true);
+		waitUntil((Inertial.get_heading() > 310)&&(Inertial.get_heading() < 315));
+		AllWheels.brake();
+		AllWheels.move(128);
+		waitUntil(Beta.get()>685)
+		RightWheels.move(64);
+		waitUntil((Inertial.get_heading() > 270)&&(Inertial.get_heading() < 273));
+		AllWheels.brake();
+		PlowLeft.set_value(false);
+		AllWheels.move(128);
+		pros::delay(1500);
+		AllWheels.move(-128);
+		pros::delay(1500);
+		AllWheels.move(128);
+		pros::delay(1500);
+		AllWheels.move(-128);
+		pros::delay(750);
+		AllWheels.brake();
+
 		
-	//}
+	}
 }
 
 /**
@@ -134,6 +176,8 @@ void autonomous() {
  */
 void opcontrol() {
 
+	AllWheels.set_brake_modes(MOTOR_BRAKE_COAST);
+	
 	while (true) {
 
 	//Drivetrain

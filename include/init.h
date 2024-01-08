@@ -37,7 +37,7 @@ pros::ADIDigitalOut Tether(7);
 
 
 //Sensors
-pros::Distance Alpha(12);
+pros::Distance Alpha(15);
 pros::Distance Beta(6);
 pros::Distance Gamma(13);
 pros::Distance Delta(14);
@@ -50,7 +50,7 @@ pros::Imu Inertial(18);
 int drvtrDZ = 10;
 int drvtrFB;
 int drvtrLR;
-int auton;
+int autonnumber;
 bool pl = false;
 bool pr = false;
 bool shieldRaised = false;

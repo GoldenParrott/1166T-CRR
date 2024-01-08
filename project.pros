@@ -312,7 +312,7 @@
       "description": ":D",
       "slot": 1,
       "icon": "X",
-      "after": "screen"
+      "after": "run"
     }
   }
 }
