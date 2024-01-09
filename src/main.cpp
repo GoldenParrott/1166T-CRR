@@ -91,6 +91,7 @@ void competition_initialize() {
  */
 void autonomous() {
 	AllWheels.set_brake_modes(MOTOR_BRAKE_HOLD);
+	Arm.tare_position();
 	/*
 	ShieldLeft.set_value(true);
 	pros::delay(50);
@@ -115,13 +116,15 @@ void autonomous() {
 	//Line up to shoot triballs
 		waitUntil(ArmLeft.get_position()>(13*360));
 		Arm.brake();
-	//
+	//Shooting triballs
 		//Indexer.move(128);
 		//waitUntil(Indexer.get_position()>(168*360));
 		//Indexer.brake();
+	//Putting the arm back to a lowered position
 		Arm.move(-128);
 		waitUntil(ArmLeft.get_position()<(0.25*360));
 		Arm.brake();
+	//Lining up to drive underneath the elvation bar
 		LeftWheels.move(64);
 		waitUntil((Inertial.get_heading() > 25)&&(Inertial.get_heading() < 30));
 		RightWheels.move(64);
@@ -129,24 +132,29 @@ void autonomous() {
 		waitUntil((Inertial.get_heading() > 0)&&(Inertial.get_heading() < 10));
 		AllWheels.brake();
 		pros::delay(100);
+	//Driving underneath the elevation bar
 		AllWheels.move(128);
 		AllWheels.set_brake_modes(MOTOR_BRAKE_HOLD);
+	  //Checks to see if we pass the vertical pole
 		waitUntil(Delta.get()<300);
+	  //Looks forward to know when to stop
 		waitUntil(Alpha.get()<1000);
 		AllWheels.move(64);
 		waitUntil(Alpha.get()<600);
 		AllWheels.brake();
+	//Drives diagonally to the goal
 		PlowLeft.set_value(true);
 		RightWheels.move(64);
-		PlowLeft.set_value(true);
 		waitUntil((Inertial.get_heading() > 310)&&(Inertial.get_heading() < 315));
 		AllWheels.brake();
 		AllWheels.move(128);
 		waitUntil(Beta.get()>685)
+	//Drives into the side of the goal
 		RightWheels.move(64);
 		waitUntil((Inertial.get_heading() > 270)&&(Inertial.get_heading() < 273));
 		AllWheels.brake();
 		PlowLeft.set_value(false);
+	//Repeatedly (twice) driveing into the goal to push triballs in
 		AllWheels.move(128);
 		pros::delay(1500);
 		AllWheels.move(-128);
